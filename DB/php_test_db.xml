@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+- phpMyAdmin XML Dump
+- version 4.8.5
+- https://www.phpmyadmin.net
+-
+- Хост: 127.0.0.1:3306
+- Время создания: Май 03 2019 г., 23:39
+- Версия сервера: 8.0.15
+- Версия PHP: 7.1.22
+-->
+
+<pma_xml_export version="1.0" xmlns:pma="https://www.phpmyadmin.net/some_doc_url/">
+    <!--
+    - Structure schemas
+    -->
+    <pma:structure_schemas>
+        <pma:database name="php_test_db" collation="utf8_general_ci" charset="utf8">
+            <pma:table name="author">
+                CREATE TABLE `author` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID автора',
+                  `name` varchar(255) NOT NULL COMMENT 'Имя автора',
+                  `is_delete` bit(1) NOT NULL DEFAULT b'0' COMMENT 'Удален',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='Автор';
+            </pma:table>
+            <pma:table name="book">
+                CREATE TABLE `book` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID книги',
+                  `name` varchar(255) NOT NULL COMMENT 'Наименование книги',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='Книга';
+            </pma:table>
+            <pma:table name="book_author">
+                CREATE TABLE `book_author` (
+                  `id_book` int(11) NOT NULL COMMENT 'ID книги',
+                  `id_author` int(11) NOT NULL COMMENT 'ID автора',
+                  KEY `id_book` (`id_book`),
+                  KEY `id_author` (`id_author`),
+                  CONSTRAINT `book_author_ibfk_1` FOREIGN KEY (`id_book`) REFERENCES `book` (`id`),
+                  CONSTRAINT `book_author_ibfk_2` FOREIGN KEY (`id_author`) REFERENCES `author` (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Связь кники с автором';
+            </pma:table>
+            <pma:procedure name="author_delete">
+                CREATE DEFINER=`root`@`%` PROCEDURE `author_delete`(IN `i_id` INT)
+                    MODIFIES SQL DATA
+                    COMMENT 'Отметить автора удаленным'
+                UPDATE author SET is_delete = 1 WHERE id = i_id
+            </pma:procedure>
+            <pma:procedure name="author_insert">
+                CREATE DEFINER=`root`@`%` PROCEDURE `author_insert`(IN `i_name` VARCHAR(255) CHARSET utf8)
+                    MODIFIES SQL DATA
+                    COMMENT 'Добавить автора'
+                INSERT INTO author (name) VALUES (i_name)
+            </pma:procedure>
+            <pma:procedure name="author_select">
+                CREATE DEFINER=`root`@`%` PROCEDURE `author_select`()
+                    READS SQL DATA
+                    COMMENT 'Получить список не удаленных авторов'
+                SELECT id, name FROM author WHERE is_delete = 0
+            </pma:procedure>
+            <pma:procedure name="author_update">
+                CREATE DEFINER=`root`@`%` PROCEDURE `author_update`(IN `i_id` INT, IN `i_name` VARCHAR(255) CHARSET utf8)
+                    MODIFIES SQL DATA
+                    COMMENT 'Изменить имя автора по его ID'
+                UPDATE author SET name = i_name WHERE id = i_id
+            </pma:procedure>
+            <pma:procedure name="book_add_author">
+                CREATE DEFINER=`root`@`%` PROCEDURE `book_add_author`(IN `i_book_id` INT, IN `i_author_id` INT)
+                    MODIFIES SQL DATA
+                    COMMENT 'Добавить автора к книге'
+                BEGIN
+                
+                DECLARE l_exist INT;
+                
+                SELECT COUNT(id_book) INTO l_exist FROM book_author 
+                WHERE id_book = i_book_id AND id_author = i_author_id;
+                
+                IF l_exist = 0 THEN
+                	INSERT INTO book_author (id_book, id_author)
+                    VALUES (i_book_id, i_author_id);
+                END IF;
+                
+                END
+            </pma:procedure>
+            <pma:procedure name="book_delete">
+                CREATE DEFINER=`root`@`%` PROCEDURE `book_delete`(IN `i_book_id` INT)
+                    MODIFIES SQL DATA
+                    COMMENT 'Удалить книгу'
+                BEGIN
+                DELETE FROM book_author WHERE id_book = i_book_id;
+                DELETE FROM book WHERE id = i_book_id;
+                END
+            </pma:procedure>
+            <pma:procedure name="book_delete_author">
+                CREATE DEFINER=`root`@`%` PROCEDURE `book_delete_author`(IN `i_book_id` INT, IN `i_author_id` INT)
+                    MODIFIES SQL DATA
+                    COMMENT 'Убрать автора из книги'
+                DELETE FROM book_author WHERE id_book = i_book_id AND id_author = i_author_id
+            </pma:procedure>
+            <pma:procedure name="book_insert">
+                CREATE DEFINER=`root`@`%` PROCEDURE `book_insert`(IN `i_name` VARCHAR(255) CHARSET utf8)
+                    MODIFIES SQL DATA
+                    COMMENT 'Добавить книгу'
+                INSERT INTO book (name) VALUES (i_name)
+            </pma:procedure>
+            <pma:procedure name="book_select">
+                CREATE DEFINER=`root`@`%` PROCEDURE `book_select`()
+                    READS SQL DATA
+                    COMMENT 'Получить список книг'
+                SELECT id, name FROM book
+            </pma:procedure>
+            <pma:procedure name="book_select_author">
+                CREATE DEFINER=`root`@`%` PROCEDURE `book_select_author`(IN `i_book_id` INT)
+                    READS SQL DATA
+                    COMMENT 'Получить авторов книги'
+                SELECT id, name 
+                FROM author a
+                INNER JOIN book_author ba ON ba.id_author = a.id
+                WHERE ba.id_book = i_book_id
+            </pma:procedure>
+            <pma:procedure name="book_update">
+                CREATE DEFINER=`root`@`%` PROCEDURE `book_update`(IN `i_book_id` INT, IN `i_name` VARCHAR(255) CHARSET utf8)
+                    MODIFIES SQL DATA
+                    COMMENT 'Переименовать книгу'
+                UPDATE book SET name = i_name WHERE id = i_book_id
+            </pma:procedure>
+        </pma:database>
+    </pma:structure_schemas>
+</pma_xml_export>
