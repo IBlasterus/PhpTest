@@ -17,7 +17,8 @@ class AuthorsContentBuilder {
     protected $content;
 
     public function __construct() {
-        $this->content = '<div class="add"><a href="#">Добавить автора</a></div>';
+        $content = '<div class="add"><a href="#addAuthorForm">Добавить автора</a></div>';
+        $this->content = $content . file_get_contents('forms/addAuthorForm.html');
     }
 
     /**
