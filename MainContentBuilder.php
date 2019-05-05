@@ -1,5 +1,6 @@
 <?php
 
+require_once 'BooksContentBuilder.php';
 require_once 'AuthorsContentBuilder.php';
 
 /**
@@ -25,10 +26,11 @@ class MainContentBuilder {
     public function build() {
         // Инициализация
         $mainContent = $this->mainTemplate;
-        $booksContent = 'Книги';
+        $booksContentBuilder = new BooksContentBuilder();
         $authorsContentBuilder = new AuthorsContentBuilder();
         
         // Построение
+        $booksContent = $booksContentBuilder->getContent();
         $mainContent = str_replace('{books}', $booksContent, $mainContent);
         
         $authorsContent = $authorsContentBuilder->getContent();

@@ -48,5 +48,4 @@ class AuthorsContentBuilder {
         
         return $content;
     }
-
 }

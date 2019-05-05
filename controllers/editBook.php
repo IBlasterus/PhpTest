@@ -1,7 +1,7 @@
 <?php
 
-require_once '../entities/Author.php';
+require_once '../entities/Book.php';
 require_once '../DB.php';
 
-Author::addAuthorToBD($_POST['name']);
+Book::editBookInBD($_POST['id'], $_POST['name']);
 echo '<script type="text/javascript">location.replace("http://phptest/");</script>';

@@ -1,0 +1,14 @@
+<div id="addBookForm" class="modalDialog">
+    <div>
+        <form action="/controllers/addBook.php" accept-charset="UTF-8" method="post">
+            <fieldset>
+                <legend>Добавить книгу</legend>
+                <p><label for="name">Название <em>*</em></label> <input type="text" name="name"></p>
+            </fieldset>
+            <p>
+                <input type="submit" value="Отправить"> 
+                <input type="submit" value="Отмена" onclick="location.replace('http://phptest/'); return false;"/>
+            </p>
+        </form>
+    </div>
+</div>

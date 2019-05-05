@@ -1,6 +1,6 @@
 <?php
 
-require_once '../entities/Authors.php';
+require_once '../entities/Author.php';
 require_once '../DB.php';
 
 Author::deleteAuthorInBD($_POST['id']);
