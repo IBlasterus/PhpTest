@@ -34,6 +34,7 @@ class BooksContentBuilder {
         $editForm = file_get_contents('forms/editBookForm.html');
         $deleteForm = file_get_contents('forms/deleteBookForm.html');
         $addAuthorToBookForm = file_get_contents('forms/addAuthorToBookForm.html');
+        $deleteAuthorFromBookForm = file_get_contents('forms/deleteAuthorFromBookForm.html');
         $forms = $editForm . $deleteForm . $addAuthorToBookForm;
         
         $i = 0;
@@ -58,22 +59,36 @@ class BooksContentBuilder {
             $listAuthors = Book::getAuthorsOfBookInBD($val->getId());
             $i = 0;
             $stringAuthors = '';
+            $options2 = '';
             foreach ($listAuthors as $a_key => $a_val) {
                 if ($i === 0) {
                     $stringAuthors = $a_val->getName();
+                    $options2 = '<option selected value="' . $a_val->getId() . '">' 
+                        . $a_val->getName() . '</option>';
                 } else {
                     $stringAuthors = $stringAuthors . ', ' . $a_val->getName();
+                    $options2 = $options2 . '<option value="' . $a_val->getId() . '">' 
+                        . $a_val->getName() . '</option>';
                 }
                 $i++;
             }
-            if ($stringAuthors === '') $stringAuthors = 'Автор не известен';
+            if ($stringAuthors === '') {
+                $stringAuthors = 'Автор не известен';
+                $deleteAuthorFromBook_block = '';
+                $currentForm = $forms;
+            } else {
+                $deleteAuthorFromBook_block = '<div class="control2"><a href="#deleteAuthorFromBookForm_' . $val->getId() . '">Удалить</a></div>';
+                $forms = $forms . $deleteAuthorFromBookForm;
+                $currentForm = str_replace('{authors_of_the_book}', $options2, $forms);
+            }
             
             $book = '<table width="100%"><tr><td class="book_line">' . $val->getName() . ' '
                     . $edit_block . ' ' . $delete_block . '</td></tr><tr><td class="book_line_hr">' 
-                    . $stringAuthors . $addAuthorToBook_block . '</td></tr></table>';
+                    . $stringAuthors . $addAuthorToBook_block . $deleteAuthorFromBook_block 
+                    . '</td></tr></table>';
             $content = $content . $book;
             
-            $currentForm = str_replace('{id}', $val->getId(), $forms);
+            $currentForm = str_replace('{id}', $val->getId(), $currentForm);
             $currentForm = str_replace('{name}', $val->getName(), $currentForm);
             $content = $content . $currentForm;
         }

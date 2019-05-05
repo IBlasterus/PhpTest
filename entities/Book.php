@@ -105,4 +105,16 @@ class Book {
         $db = new DB();
         $db->query($sql);
     }
+    
+    /**
+     * Удалить автора из книги
+     * 
+     * @param type $book_id int
+     * @param type $author_id int
+     */
+    public static function deleteAuthorFromBookInBD($book_id, $author_id) {
+        $sql = 'CALL `book_delete_author`("' . $book_id . '", "' . $author_id . '")';
+        $db = new DB();
+        $db->query($sql);
+    }
 }
