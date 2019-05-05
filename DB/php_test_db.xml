@@ -5,7 +5,7 @@
 - https://www.phpmyadmin.net
 -
 - Хост: 127.0.0.1:3306
-- Время создания: Май 03 2019 г., 23:39
+- Время создания: Май 05 2019 г., 08:21
 - Версия сервера: 8.0.15
 - Версия PHP: 7.1.22
 -->
@@ -20,7 +20,6 @@
                 CREATE TABLE `author` (
                   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID автора',
                   `name` varchar(255) NOT NULL COMMENT 'Имя автора',
-                  `is_delete` bit(1) NOT NULL DEFAULT b'0' COMMENT 'Удален',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='Автор';
             </pma:table>
@@ -44,8 +43,11 @@
             <pma:procedure name="author_delete">
                 CREATE DEFINER=`root`@`%` PROCEDURE `author_delete`(IN `i_id` INT)
                     MODIFIES SQL DATA
-                    COMMENT 'Отметить автора удаленным'
-                UPDATE author SET is_delete = 1 WHERE id = i_id
+                    COMMENT 'Удаление автора'
+                BEGIN
+                DELETE FROM book_author WHERE id_author = i_id;
+                DELETE FROM author WHERE id = i_id;
+                END
             </pma:procedure>
             <pma:procedure name="author_insert">
                 CREATE DEFINER=`root`@`%` PROCEDURE `author_insert`(IN `i_name` VARCHAR(255) CHARSET utf8)
@@ -56,8 +58,8 @@
             <pma:procedure name="author_select">
                 CREATE DEFINER=`root`@`%` PROCEDURE `author_select`()
                     READS SQL DATA
-                    COMMENT 'Получить список не удаленных авторов'
-                SELECT id, name FROM author WHERE is_delete = 0
+                    COMMENT 'Получить список авторов'
+                SELECT id, name FROM author
             </pma:procedure>
             <pma:procedure name="author_update">
                 CREATE DEFINER=`root`@`%` PROCEDURE `author_update`(IN `i_id` INT, IN `i_name` VARCHAR(255) CHARSET utf8)

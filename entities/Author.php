@@ -42,4 +42,10 @@ class Author {
     public function getName() {
         return $this->name;
     }
+    
+    public static function addAuthorToBD($name) {
+        $sql = 'CALL `author_insert`("' . $name . '")';
+        $db = new DB();
+        $db->query($sql);
+    }
 }
