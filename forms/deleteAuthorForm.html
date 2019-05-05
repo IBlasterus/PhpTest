@@ -1,0 +1,15 @@
+<div id="deleteAuthorForm_{id}" class="modalDialog">
+    <div>
+        <form action="/controllers/deleteAuthor.php" accept-charset="UTF-8" method="post">
+            <fieldset>
+                <legend>Удалить автора?</legend>
+                <p><label for="name">Вы действительно хотите удалить автора "{name}"?</label></p>
+            </fieldset>
+            <input type="hidden" name="id" value="{id}" /> 
+            <p>
+                <input type="submit" value="Удалить"> 
+                <input type="submit" value="Отмена" onclick="location.replace('http://phptest/'); return false;"/>
+            </p>
+        </form>
+    </div>
+</div>

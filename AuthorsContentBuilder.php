@@ -30,16 +30,20 @@ class AuthorsContentBuilder {
         $content = $this->content;
         $authors = new Authors();
         $editForm = file_get_contents('forms/editAuthorForm.html');
+        $deleteForm = file_get_contents('forms/deleteAuthorForm.html');
+        $forms = $editForm . $deleteForm;
 
         foreach ($authors->getList() as $key => $val) {
             $edit_block = '<div class="control"><a href="#editAuthorForm_' . $val->getId() . '">Редактировать</a></div>';
-            $delete_block = '<div class="control"><a href="#">Удалить</a></div>';
+            $delete_block = '<div class="control"><a href="#deleteAuthorForm_' . $val->getId() . '">Удалить</a></div>';
+            
             $author = '<div class="line">' . $val->getName() . ' '
                     . $edit_block . ' ' . $delete_block . '</div>';
             $content = $content . $author;
-            $currentEditForm = str_replace('{id}', $val->getId(), $editForm);
-            $currentEditForm = str_replace('{name}', $val->getName(), $currentEditForm);
-            $content = $content . $currentEditForm;
+            
+            $currentForm = str_replace('{id}', $val->getId(), $forms);
+            $currentForm = str_replace('{name}', $val->getName(), $currentForm);
+            $content = $content . $currentForm;
         }
         
         return $content;
