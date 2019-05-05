@@ -76,4 +76,21 @@ class Book {
         $db = new DB();
         $db->query($sql);
     }
+    
+    /**
+     * Получить авторов книги
+     * 
+     * @param type $id int
+     */
+    public static function getAuthorsOfBookInBD($id) {
+        $sql = 'CALL `book_select_author`("' . $id . '")';
+        $db = new DB();
+        $result = $db->query($sql);
+        $listAuthors = [];
+        while ($row = $result->fetch_assoc()) {
+            $author = new Author($row['id'], $row['name']);
+            $listAuthors[] = $author;
+        }
+        return $listAuthors;
+    }
 }

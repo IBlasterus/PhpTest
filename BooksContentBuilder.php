@@ -37,8 +37,22 @@ class BooksContentBuilder {
             $edit_block = '<div class="control"><a href="#editBookForm_' . $val->getId() . '">Редактировать</a></div>';
             $delete_block = '<div class="control"><a href="#deleteBookForm_' . $val->getId() . '">Удалить</a></div>';
             
-            $book = '<div class="line">' . $val->getName() . ' '
-                    . $edit_block . ' ' . $delete_block . '</div>';
+            $listAuthors = Book::getAuthorsOfBookInBD($val->getId());
+            $i = 0;
+            $stringAuthors = '';
+            foreach ($listAuthors as $a_key => $a_val) {
+                if ($i === 0) {
+                    $stringAuthors = $a_val->getName();
+                } else {
+                    $stringAuthors = $stringAuthors . ', ' . $a_val->getName();
+                }
+                $i++;
+            }
+            if ($stringAuthors === '') $stringAuthors = 'Автор не известен';
+            
+            $book = '<table width="100%"><tr><td class="book_line">' . $val->getName() . ' '
+                    . $edit_block . ' ' . $delete_block . '</td></tr><tr><td class="book_line_hr">' 
+                    . $stringAuthors . '</td></tr></table>';
             $content = $content . $book;
             
             $currentForm = str_replace('{id}', $val->getId(), $forms);
