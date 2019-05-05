@@ -93,4 +93,16 @@ class Book {
         }
         return $listAuthors;
     }
+    
+    /**
+     * Добавить автора к книге
+     * 
+     * @param type $book_id int
+     * @param type $author_id int
+     */
+    public static function addAuthorToBookInBD($book_id, $author_id) {
+        $sql = 'CALL `book_add_author`("' . $book_id . '", "' . $author_id . '")';
+        $db = new DB();
+        $db->query($sql);
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'entities/Books.php';
+require_once 'entities/Authors.php';
 
 /**
  * Построитель контента страницы книг
@@ -29,13 +30,30 @@ class BooksContentBuilder {
     public function getContent() {
         $content = $this->content;
         $books = new Books();
+        $authors = new Authors();
         $editForm = file_get_contents('forms/editBookForm.html');
         $deleteForm = file_get_contents('forms/deleteBookForm.html');
-        $forms = $editForm . $deleteForm;
+        $addAuthorToBookForm = file_get_contents('forms/addAuthorToBookForm.html');
+        $forms = $editForm . $deleteForm . $addAuthorToBookForm;
+        
+        $i = 0;
+        $options = '';
+        foreach ($authors->getList() as $key => $val) {
+            if ($i === 0) {
+                $options = '<option selected value="' . $val->getId() . '">' 
+                        . $val->getName() . '</option>';
+            } else {
+                $options = $options . '<option value="' . $val->getId() . '">' 
+                        . $val->getName() . '</option>';
+            }
+            $i++;
+        }
+        $forms = str_replace('{authors}', $options, $forms);
 
         foreach ($books->getList() as $key => $val) {
             $edit_block = '<div class="control"><a href="#editBookForm_' . $val->getId() . '">Редактировать</a></div>';
             $delete_block = '<div class="control"><a href="#deleteBookForm_' . $val->getId() . '">Удалить</a></div>';
+            $addAuthorToBook_block = '<div class="control2"><a href="#addAuthorToBookForm_' . $val->getId() . '">Добавить</a></div>';
             
             $listAuthors = Book::getAuthorsOfBookInBD($val->getId());
             $i = 0;
@@ -52,7 +70,7 @@ class BooksContentBuilder {
             
             $book = '<table width="100%"><tr><td class="book_line">' . $val->getName() . ' '
                     . $edit_block . ' ' . $delete_block . '</td></tr><tr><td class="book_line_hr">' 
-                    . $stringAuthors . '</td></tr></table>';
+                    . $stringAuthors . $addAuthorToBook_block . '</td></tr></table>';
             $content = $content . $book;
             
             $currentForm = str_replace('{id}', $val->getId(), $forms);

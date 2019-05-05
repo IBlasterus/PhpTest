@@ -1,0 +1,20 @@
+<div id="addAuthorToBookForm_{id}" class="modalDialog">
+    <div>
+        <form action="/controllers/addAuthorToBook.php" accept-charset="UTF-8" method="post">
+            <fieldset>
+                <legend>Добавить автора к книге</legend>
+                <p>
+                    <label for="author_id">Автор <em>*</em></label>
+                    <select name="author_id">
+                        {authors}
+                    </select>
+                </p>
+            </fieldset>
+            <input type="hidden" name="book_id" value="{id}" /> 
+            <p>
+                <input type="submit" value="Отправить"> 
+                <input type="submit" value="Отмена" onclick="location.replace('http://phptest/'); return false;"/>
+            </p>
+        </form>
+    </div>
+</div>
