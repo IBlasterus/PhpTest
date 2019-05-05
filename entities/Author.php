@@ -48,4 +48,10 @@ class Author {
         $db = new DB();
         $db->query($sql);
     }
+    
+    public static function editAuthorInBD($id, $name) {
+        $sql = 'CALL `author_update`("' . $id . '", "' . $name . '")';
+        $db = new DB();
+        $db->query($sql);
+    }
 }

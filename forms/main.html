@@ -103,13 +103,6 @@
                 text-align: right;
             }
 
-            .line {
-                font: normal 24px Arial, Sans-serif;
-                border-bottom-style: solid;
-                border-bottom-width: 2px;
-                padding: 10px;
-            }
-
             .modalDialog {
                 position: fixed;
                 font-family: Arial, Helvetica, sans-serif;
@@ -141,6 +134,25 @@
                 background: -moz-linear-gradient(#fff, #999);
                 background: -webkit-linear-gradient(#fff, #999);
                 background: -o-linear-gradient(#fff, #999);
+            }
+
+            .line {
+                font: normal 24px Arial, Sans-serif;
+                border-bottom-style: solid;
+                border-bottom-width: 2px;
+                padding: 10px;
+                display:flex;
+                align-items: center
+            }
+            
+            .line:hover .control {
+                display: block;
+            }
+
+            .control {
+                font: normal 14px Arial, Sans-serif;
+                display: none;
+                margin-left: 10px;
             }
         </style>
     </head>

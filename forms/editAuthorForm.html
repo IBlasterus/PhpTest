@@ -1,0 +1,15 @@
+<div id="editAuthorForm_{id}" class="modalDialog">
+    <div>
+        <form action="/controllers/editAuthor.php" accept-charset="UTF-8" method="post">
+            <fieldset>
+                <legend>Редактировать автора</legend>
+                <p><label for="name">Имя <em>*</em></label> <input type="text" name="name" value="{name}"></p>
+            </fieldset>
+            <input type="hidden" name="id" value="{id}" /> 
+            <p>
+                <input type="submit" value="Отправить"> 
+                <input type="submit" value="Отмена" onclick="location.replace('http://phptest/'); return false;"/>
+            </p>
+        </form>
+    </div>
+</div>
