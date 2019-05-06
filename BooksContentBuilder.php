@@ -93,6 +93,7 @@ class BooksContentBuilder {
             $content = $content . $currentForm;
         }
         
+        $content = str_replace('{SELF_URL}', SELF_URL, $content);
         return $content;
     }
 }

@@ -15,11 +15,7 @@ class DB {
     private $link;
 
     function __construct() {
-        $host = 'localhost'; // адрес сервера 
-        $database = 'php_test_db'; // имя базы данных
-        $user = 'root'; // имя пользователя
-        $password = ''; // пароль
-        $link = new mysqli($host, $user, $password, $database)
+        $link = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
                 or die("Ошибка " . mysqli_error($link));
         $this->link = $link;
     }
